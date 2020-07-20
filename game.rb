@@ -1,36 +1,46 @@
 class Game
-  newGame 
-  # initialize game with two players, each having three lives:
-
-  # using .chomp:
-  
-
-  # selecting player logic
-  def question
-    firstNum = rand(1..20) 
-    secondNum = rand(1..20)
-    correctAnswer = firstNum + secondNum
-    
-    puts "What is the value of #{firstNum} + #{secondNum}?"
-    print "> "
-    # player has seen question, inputs answer on this line
-    playerAnswer = $stdin.gets.chomp
-    
-    # answer checking logic and responses:
-    if correctAnswer.to_i == playerAnswer.to_i
-      puts "Congrats! You can add."
-    else 
-      
-      # INSERT CODE FOR TAKING OFF A LIFE
-      puts "Did you seriously think that was right?" 
-      puts "It's #{correctAnswer}! Lives minus one!"
-    end
-    #Check for game over???
-    # INSERT CODE FOR CHANGING SELECTED PLAYER
+  def initialize
+    @players = [
+      Player.new("Math Monkey 1"),
+      Player.new("Math Monkey 2")]
+    @gameOver = false
+    @currentPlayer = @players[0]
   end
-  # endgame logic
+  
+  def gameOn
+    while (not @gameOver) do 
+      puts "Monkey1: #{@players[0].lives} lives remain || Monkey2: #{@players[1].lives} lives remain "
+      puts "============= New Turn ============="
+      question = Question.new
 
+      puts "#{@currentPlayer.name}: What is #{question.firstNum} plus #{question.secondNum}?"
+      playerAnswer = gets.chomp.to_i
+      if playerAnswer == question.correctAnswer
+        puts "Congrats! You can add."
+      else
+        @currentPlayer.questionFail
+        self.check_gameOver
+        puts "Did you seriously think that was right?" 
+        puts "It's #{question.correctAnswer}! You're down to #{@currentPlayer.lives}"
+      end
+
+      if @currentPlayer == @players[0]
+        @currentPlayer = @players[1]
+      else
+        @currentPlayer = @players[0]
+      end
+    end
+    # the above code will run in a loop until this is triggered
+    # by someone running out of lives:
+    puts "============= Game Over ============="
+    puts "Wow. #{@currentPlayer.name} wins! Amazing."
+  end
   
+  # After each failed answer attempt, we check to see if it's
+  # time to end the game:
+  def check_gameOver
+    if @currentPlayer.lives == 0
+      @gameOver = true
+    end
+  end
 end
-  
-#Logic for question creation and answer checking:
