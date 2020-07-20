@@ -1,30 +1,25 @@
 require "players"
 require "game"
+require "question"
 
-# math game, turns, simple addition problems (always adding),
-# new question is generated for each turn by picking two numbers
-# between 1 and 20. players take turns, the player whose turn it is
-# will answer the question, if it's wrong, they lose a life, otherwise,
-# the game continues without changing. once someone has lost all lives,
-# a winner is declared. 
+# I'm pretty sure this isn't how this works, but..
+# Placeholder value. When main.rb is run, it should ask if you want to start
+# a new game.
 
-# 2 players
+# 
 
-
-# start with 3 lives each
-# Lose life if missed question
-# end of turn, game shows "SCORES" (lives?) for both players
-# game ends when one player loses all lives
-# game announces winner and other player's score.
+# Code for a new game: 
+# initialize two players
+p1 = Player.new($stdin.gets.chomp)
+p2 = Player.new($stdin.gets.chomp)
 
 
 
+# initialize game
+g = Game.new(p1, p2)
 
-# Players will store the logic related to themselves, especially lives,
-# which will be referenced by the Game object.
-# The "game" class will have the logic for questions, displaying them,
-# and keeping track of how many lives are remaining. The players are useless
-# by themselves, because only in comparing them will their data become relevant
-# to the game, and we would want to create new players each time a game is started
-# to avoid carryover of lives and score (what if you finish a game with 1 life left
-# and then start a new game with someone else but you still only have that one life?)
+
+while g.game_shall_continue?
+  g.question
+  g.validate_answer($stdin.gets.chomp)
+end
